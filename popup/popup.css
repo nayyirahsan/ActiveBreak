@@ -1,0 +1,119 @@
+.ab-popup-bg {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: linear-gradient(135deg, #eaf1fb 0%, #f7faff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', Arial, sans-serif;
+}
+.ab-card {
+  width: 320px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px rgba(44, 62, 80, 0.13);
+  padding: 28px 24px 18px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.ab-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.ab-logo {
+  background: #2d7ff9;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 38px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+}
+h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2d7ff9;
+  margin: 0 0 4px 0;
+  letter-spacing: 1px;
+}
+.ab-subtitle {
+  font-size: 1rem;
+  color: #5a6b7b;
+  text-align: center;
+  margin: 0 0 2px 0;
+  font-weight: 500;
+}
+.ab-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.ab-form label {
+  margin-top: 8px;
+  margin-bottom: 2px;
+  font-size: 14px;
+  color: #2d7ff9;
+  font-weight: 600;
+}
+.ab-form select, .ab-form button {
+  margin-bottom: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #c7d6ee;
+  font-size: 15px;
+  font-family: inherit;
+}
+.ab-form select:focus {
+  outline: 2px solid #2d7ff9;
+}
+#ab-start-btn, .ab-form button {
+  background: linear-gradient(90deg, #2d7ff9 60%, #5a9bff 100%);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+}
+#ab-start-btn:hover, .ab-form button:hover {
+  background: linear-gradient(90deg, #1a5fcc 60%, #2d7ff9 100%);
+}
+.ab-status {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #2d7ff9;
+  text-align: center;
+  min-height: 18px;
+}
+.ab-countdown {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #2d7ff9;
+  text-align: center;
+  min-height: 18px;
+}
+.ab-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+  font-size: 12px;
+  color: #7a8ca3;
+  opacity: 0.8;
+  text-align: center;
+}
+.ab-footer-icon {
+  font-size: 16px;
+  color: #2d7ff9;
+  vertical-align: middle;
+} 

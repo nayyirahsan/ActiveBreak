@@ -1,0 +1,396 @@
+/* ActiveBreak break page.
+   Uses the shared ActiveBreak design tokens — keep the :root block in sync
+   across popup/popup.css, break/break.css, and content/overlay.css. */
+
+:root {
+  /* color */
+  --ab-bg: #f7f7f8;
+  --ab-surface: #ffffff;
+  --ab-surface-2: #fafafa;
+  --ab-border: #e4e4e7;
+  --ab-border-strong: #d4d4d8;
+  --ab-text: #18181b;
+  --ab-text-2: #52525b;
+  --ab-text-3: #71717a;
+  --ab-accent: #4f46e5;
+  --ab-accent-strong: #4338ca;
+  --ab-accent-soft: #eef2ff;
+  --ab-success: #15803d;
+  --ab-success-soft: #f0fdf4;
+  --ab-danger: #dc2626;
+  /* shape */
+  --ab-radius-s: 6px;
+  --ab-radius-m: 10px;
+  --ab-radius-l: 16px;
+  /* elevation */
+  --ab-shadow-s: 0 1px 2px rgba(24, 24, 27, 0.06);
+  --ab-shadow-l: 0 1px 2px rgba(24, 24, 27, 0.04), 0 12px 32px rgba(24, 24, 27, 0.07);
+  /* motion */
+  --ab-fast: 150ms;
+  --ab-slow: 350ms;
+  --ab-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  /* focus */
+  --ab-ring: 0 0 0 3px rgba(79, 70, 229, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px;
+  background: var(--ab-bg);
+  color: var(--ab-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ab-card {
+  width: min(880px, 100%);
+  background: var(--ab-surface);
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-l);
+  padding: 20px 28px 18px;
+  box-shadow: var(--ab-shadow-l);
+  animation: ab-rise var(--ab-slow) var(--ab-ease);
+}
+
+/* Top bar: brand left, escape hatch right */
+.ab-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ab-border);
+  margin-bottom: 20px;
+}
+
+.ab-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.ab-wordmark {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+#skip-btn {
+  padding: 6px 12px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--ab-radius-s);
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ab-text-3);
+  cursor: pointer;
+  transition: color var(--ab-fast), border-color var(--ab-fast);
+}
+
+#skip-btn:hover {
+  color: var(--ab-text-2);
+  border-color: var(--ab-border);
+}
+
+#skip-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ab-ring);
+}
+
+/* Two-column session layout */
+.ab-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(240px, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.ab-webcam-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--ab-radius-m);
+  overflow: hidden;
+  background: var(--ab-surface-2);
+  border: 1px solid var(--ab-border);
+}
+
+#webcam,
+#skeleton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* mirror, like a gym mirror */
+}
+
+#skeleton {
+  z-index: 2;
+}
+
+.ab-webcam-msg {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-size: 14px;
+  color: var(--ab-text-2);
+  background: var(--ab-surface-2);
+  text-align: center;
+}
+
+.ab-webcam-msg[hidden] {
+  display: none;
+}
+
+/* Live coaching hint over the video */
+.ab-form-hint {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 14px;
+  border-radius: var(--ab-radius-s);
+  background: rgba(24, 24, 27, 0.78);
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  text-align: left;
+}
+
+.ab-form-hint::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #a5b4fc;
+  animation: ab-pulse 1.6s ease-in-out infinite;
+}
+
+/* Session panel */
+.ab-session {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.ab-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ab-accent);
+  margin-bottom: 4px;
+}
+
+.ab-exercise-name {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.ab-tip {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ab-text-2);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--ab-border);
+  margin-bottom: 16px;
+}
+
+#session-active {
+  flex: 1;
+}
+
+/* One segment per rep — fills as each rep is verified */
+.ab-segments {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.ab-segments span {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--ab-border);
+  transition: background var(--ab-slow) var(--ab-ease);
+}
+
+.ab-segments span.ab-filled {
+  background: var(--ab-accent);
+}
+
+.ab-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ab-count #reps {
+  display: inline-block;
+  font-size: 44px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+#reps.ab-pop {
+  animation: ab-pop 0.3s var(--ab-ease);
+}
+
+.ab-count-total {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ab-text-3);
+}
+
+.ab-status {
+  font-size: 13px;
+  color: var(--ab-text-2);
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+/* Completion state */
+#session-complete {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#session-complete[hidden] {
+  display: none;
+}
+
+.ab-check {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--ab-success-soft);
+  color: var(--ab-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  animation: ab-check-in 0.45s var(--ab-ease);
+}
+
+.ab-complete-title {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.ab-complete-summary {
+  font-size: 13px;
+  color: var(--ab-text-2);
+}
+
+/* Primary action */
+#done-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 11px 20px;
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-m);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+  background: var(--ab-surface-2);
+  color: var(--ab-text-3);
+  transition: background var(--ab-fast), color var(--ab-fast), border-color var(--ab-fast);
+}
+
+#done-btn.ab-ready {
+  cursor: pointer;
+  background: var(--ab-accent);
+  border-color: var(--ab-accent);
+  color: #ffffff;
+  box-shadow: var(--ab-shadow-s);
+}
+
+#done-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ab-ring);
+}
+
+#done-btn.ab-ready:hover {
+  background: var(--ab-accent-strong);
+}
+
+.ab-privacy {
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--ab-text-3);
+  text-align: center;
+}
+
+/* Narrow screens: stack the panels */
+@media (max-width: 780px) {
+  .ab-layout {
+    grid-template-columns: 1fr;
+  }
+  .ab-webcam-frame {
+    min-height: 0;
+    height: auto;
+  }
+  .ab-session {
+    text-align: left;
+  }
+}
+
+@keyframes ab-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ab-pop {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ab-check-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes ab-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

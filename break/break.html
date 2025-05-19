@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ActiveBreak — Time for a break</title>
+  <link rel="stylesheet" href="break.css">
+</head>
+<body>
+  <main class="ab-card">
+    <header class="ab-topbar">
+      <div class="ab-brand">
+        <svg class="ab-logo" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+          <rect width="24" height="24" rx="6" fill="#4f46e5"/>
+          <path d="M5 12.5h3l1.9-4.8 3.7 8.4 1.9-4.8H19" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="ab-wordmark">ActiveBreak</span>
+      </div>
+      <button id="skip-btn" type="button">Skip this break</button>
+    </header>
+
+    <div class="ab-layout">
+      <section class="ab-video-col" aria-label="Camera preview">
+        <div class="ab-webcam-frame">
+          <video id="webcam" autoplay playsinline muted></video>
+          <canvas id="skeleton"></canvas>
+          <div class="ab-webcam-msg" id="webcam-msg">Loading pose model…</div>
+          <div class="ab-form-hint" id="form-hint" hidden></div>
+        </div>
+      </section>
+
+      <section class="ab-session" aria-label="Exercise session">
+        <p class="ab-eyebrow">Time for a break</p>
+        <h1 class="ab-exercise-name" id="exercise-name">Jumping Jacks</h1>
+        <p class="ab-tip" id="exercise-tip"></p>
+
+        <div id="session-active">
+          <div class="ab-segments" id="segments" role="progressbar"
+               aria-label="Verified reps" aria-valuemin="0" aria-valuenow="0"></div>
+          <div class="ab-count" aria-hidden="true">
+            <span id="reps">0</span><span class="ab-count-total">of <span id="rep-total">10</span></span>
+          </div>
+          <p class="ab-status" id="status" role="status">Starting camera…</p>
+        </div>
+
+        <div id="session-complete" hidden>
+          <div class="ab-check" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M6 14.5l5.5 5.5L22 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2 class="ab-complete-title">Break complete</h2>
+          <p class="ab-complete-summary" id="complete-summary" role="status"></p>
+        </div>
+
+        <button id="done-btn" disabled>Finish your reps to unlock</button>
+      </section>
+    </div>
+
+    <p class="ab-privacy">Pose detection runs entirely on this device — video never leaves your browser.</p>
+  </main>
+  <script type="module" src="break.js"></script>
+</body>
+</html>

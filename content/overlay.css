@@ -1,139 +1,181 @@
-@import url('https://fonts.googleapis.com/css?family=Inter:400,600,800&display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+/* ActiveBreak lock screen.
+   Uses the shared ActiveBreak design tokens — keep values in sync with
+   popup/popup.css and break/break.css. Injected into arbitrary pages, so
+   everything is namespaced, hardened with !important where pages are likely
+   to interfere, and uses literal values instead of :root variables (a host
+   page could redefine those). No external fonts/imports (page CSP-safe). */
 
-#activebreak-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(135deg, #eaf1fb 0%, #f7faff 100%);
-  z-index: 2147483647;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: all;
-  outline: none;
-  font-family: 'Inter', Arial, sans-serif;
-}
-#activebreak-overlay[aria-modal="true"] {
-  /* For accessibility: trap focus */
-  outline: 2px solid #2d7ff9;
-}
-body:has(#activebreak-overlay) {
+html.ab-scroll-lock {
   overflow: hidden !important;
 }
-.ab-modal {
-  background: #fff;
-  border-radius: 18px;
-  padding: 36px 32px 24px 32px;
-  box-shadow: 0 6px 32px rgba(44,62,80,0.15);
-  text-align: center;
-  min-width: 340px;
-  max-width: 95vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+#activebreak-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+  background: #f7f7f8 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  color: #18181b !important;
+  text-align: center !important;
+  line-height: 1.4 !important;
+  animation: ab-fade-in 0.3s ease-out;
+}
+
+#activebreak-overlay * {
+  box-sizing: border-box !important;
+  font-family: inherit;
+}
+
+#activebreak-overlay .ab-modal {
   position: relative;
+  width: min(400px, 94vw);
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  border-radius: 16px;
+  padding: 26px 32px 20px;
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04), 0 12px 32px rgba(24, 24, 27, 0.07);
+  animation: ab-rise 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
-.ab-modal .material-icons.ab-break-logo {
-  background: #2d7ff9;
-  color: #fff;
-  border-radius: 50%;
-  font-size: 40px;
-  width: 68px;
-  height: 68px;
-  display: flex;
+
+#activebreak-overlay .ab-brand {
+  display: inline-flex !important;
   align-items: center;
-  justify-content: center;
-  margin: 0 auto 12px auto;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
-}
-.ab-modal h2 {
-  color: #2d7ff9;
-  margin-bottom: 10px;
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-.ab-modal p {
-  color: #5a6b7b;
-  font-size: 1.05rem;
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-.ab-exercise {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 10px 0 18px 0;
-  color: #222;
-}
-.ab-webcam-container {
-  position: relative;
-  width: 340px;
-  height: 240px;
-  margin: 0 auto 18px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #eaf1fb;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(44,62,80,0.08);
-  overflow: hidden;
-}
-#ab-webcam, #ab-canvas {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 320px !important;
-  height: 220px !important;
-  border-radius: 10px;
-  object-fit: cover;
-  background: #eaf1fb;
-}
-#ab-webcam {
-  z-index: 1;
-}
-#ab-canvas {
-  z-index: 2;
-  background: transparent !important;
-}
-#ab-close-btn {
-  background: linear-gradient(90deg, #2d7ff9 60%, #5a9bff 100%);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 36px;
-  font-size: 18px;
-  margin-top: 10px;
-  cursor: pointer;
-  font-weight: 700;
-  transition: background 0.18s, box-shadow 0.18s;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
-}
-#ab-close-btn:disabled {
-  background: #b3d1fa;
-  cursor: not-allowed;
-}
-.ab-timer {
-  margin-top: 12px;
-  color: #2d7ff9;
-  font-size: 16px;
+  gap: 8px;
+  font-size: 13px !important;
   font-weight: 600;
+  color: #18181b;
+  margin-bottom: 12px;
 }
-.ab-privacy-note {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 22px;
-  font-size: 13px;
-  color: #7a8ca3;
-  opacity: 0.8;
-  text-align: center;
+
+#activebreak-overlay .ab-brand svg {
+  display: block;
+  width: 22px;
+  height: 22px;
 }
-.ab-privacy-icon {
-  font-size: 18px;
-  color: #2d7ff9;
-  vertical-align: middle;
-} 
+
+#activebreak-overlay .ab-title {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em;
+  line-height: 1.2 !important;
+  color: #18181b !important;
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+  text-transform: none !important;
+}
+
+#activebreak-overlay .ab-lede {
+  font-size: 14px !important;
+  color: #52525b !important;
+  margin: 0 0 16px !important;
+}
+
+#activebreak-overlay .ab-exercise {
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  text-align: left !important;
+}
+
+#activebreak-overlay .ab-exercise-row {
+  display: flex !important;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#activebreak-overlay .ab-exercise-name {
+  font-size: 15px !important;
+  font-weight: 600;
+  color: #18181b !important;
+}
+
+#activebreak-overlay .ab-progress-text {
+  font-size: 12px !important;
+  color: #52525b !important;
+  font-variant-numeric: tabular-nums;
+}
+
+#activebreak-overlay .ab-segments {
+  display: flex !important;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+#activebreak-overlay .ab-segments[hidden] {
+  display: none !important;
+}
+
+#activebreak-overlay .ab-segments span {
+  flex: 1;
+  height: 6px !important;
+  border-radius: 3px;
+  background: #e4e4e7;
+  transition: background 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#activebreak-overlay .ab-segments span.ab-filled {
+  background: #4f46e5;
+}
+
+#activebreak-overlay #ab-go-btn {
+  display: block;
+  width: 100%;
+  padding: 11px 20px !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(24, 24, 27, 0.06);
+  transition: background 0.15s;
+  text-transform: none !important;
+}
+
+#activebreak-overlay #ab-go-btn:focus {
+  outline: 2px solid rgba(79, 70, 229, 0.35) !important;
+  outline-offset: 3px !important;
+}
+
+#activebreak-overlay #ab-go-btn:hover {
+  background: #4338ca !important;
+}
+
+#activebreak-overlay .ab-privacy {
+  margin-top: 14px;
+  font-size: 11px !important;
+  color: #71717a !important;
+}
+
+@keyframes ab-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ab-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #activebreak-overlay,
+  #activebreak-overlay * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -2,45 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ActiveBreak Setup</title>
+  <title>ActiveBreak</title>
   <link rel="stylesheet" href="popup.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,600,800&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
-  <div class="ab-popup-bg">
-    <div class="ab-card">
-      <div class="ab-header">
-        <span class="material-icons ab-logo">fitness_center</span>
-        <h2>ActiveBreak</h2>
-        <p class="ab-subtitle">Take healthy breaks, stay productive, and let AI keep you moving!</p>
-      </div>
-      <form id="setup-form" class="ab-form">
-        <label for="timer">Break Interval</label>
-        <select id="timer" name="timer">
-          <option value="0.1667">10 seconds (test)</option>
-          <option value="20">20 min</option>
-          <option value="30">30 min</option>
-          <option value="60">1 hour</option>
-        </select>
-        <label for="exercise">Exercise</label>
-        <select id="exercise" name="exercise">
-          <option value="random">Random</option>
-          <option value="jumping_jacks">Jumping Jacks</option>
-          <option value="squats">Squats</option>
-          <option value="push_ups">Push-ups</option>
-        </select>
-        <button type="submit" id="start-btn">Start</button>
-      </form>
-      <div id="status" class="ab-status"></div>
-      <div id="countdown-display" class="ab-countdown"></div>
-      <footer class="ab-footer">
-        <span class="material-icons ab-footer-icon">lock</span>
-        <span>Your camera never leaves your device. AI runs locally for your privacy.</span>
-      </footer>
+  <header class="ab-header">
+    <svg class="ab-logo" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+      <rect width="24" height="24" rx="6" fill="#4f46e5"/>
+      <path d="M5 12.5h3l1.9-4.8 3.7 8.4 1.9-4.8H19" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="ab-header-text">
+      <h1>ActiveBreak</h1>
+      <p class="ab-tagline">Movement breaks while you work</p>
     </div>
+  </header>
+
+  <section class="ab-hero" aria-label="Timer status">
+    <div class="ab-ring" id="ring">
+      <div class="ab-ring-inner">
+        <div class="ab-time" id="time-display">—</div>
+        <div class="ab-time-label" id="time-label">no timer yet</div>
+      </div>
+    </div>
+    <p class="ab-context" id="context-line"></p>
+  </section>
+
+  <button type="button" id="go-break-btn" class="ab-primary" hidden>Go to break tab</button>
+
+  <form id="setup-form">
+    <fieldset class="ab-group">
+      <legend>Break every</legend>
+      <div class="ab-segments">
+        <label><input type="radio" name="interval" value="0.1667"><span>10s<em>test</em></span></label>
+        <label><input type="radio" name="interval" value="20" checked><span>20<em>min</em></span></label>
+        <label><input type="radio" name="interval" value="30"><span>30<em>min</em></span></label>
+        <label><input type="radio" name="interval" value="60"><span>60<em>min</em></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="ab-group">
+      <legend>Exercise</legend>
+      <div class="ab-pills">
+        <label><input type="radio" name="exercise" value="random" checked><span>Surprise me</span></label>
+        <label><input type="radio" name="exercise" value="jumping_jacks"><span>Jumping Jacks</span></label>
+        <label><input type="radio" name="exercise" value="squats"><span>Squats</span></label>
+        <label><input type="radio" name="exercise" value="push_ups"><span>Push-ups</span></label>
+      </div>
+    </fieldset>
+
+    <button type="submit" id="start-btn" class="ab-primary">Start timer</button>
+  </form>
+
+  <div class="ab-actions" id="run-actions" hidden>
+    <button type="button" id="adjust-btn" aria-expanded="false" aria-controls="setup-form">Adjust schedule</button>
+    <span class="ab-dot" aria-hidden="true">·</span>
+    <button type="button" id="stop-btn">Stop timer</button>
   </div>
+
+  <div id="status" class="ab-status" role="status"></div>
+
+  <p class="ab-stats" id="stats-line" hidden></p>
+
+  <footer class="ab-footer">
+    Pose detection runs on-device — video never leaves your browser.
+  </footer>
+
   <script src="popup.js"></script>
 </body>
-</html> 
+</html>

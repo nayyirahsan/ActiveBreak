@@ -1,119 +1,336 @@
-.ab-popup-bg {
-  min-height: 100vh;
-  min-width: 100vw;
-  background: linear-gradient(135deg, #eaf1fb 0%, #f7faff 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Inter', Arial, sans-serif;
+/* ActiveBreak popup.
+   Uses the shared ActiveBreak design tokens — keep the :root block in sync
+   across popup/popup.css, break/break.css, and content/overlay.css. */
+
+:root {
+  /* color */
+  --ab-bg: #f7f7f8;
+  --ab-surface: #ffffff;
+  --ab-surface-2: #fafafa;
+  --ab-border: #e4e4e7;
+  --ab-border-strong: #d4d4d8;
+  --ab-text: #18181b;
+  --ab-text-2: #52525b;
+  --ab-text-3: #71717a;
+  --ab-accent: #4f46e5;
+  --ab-accent-strong: #4338ca;
+  --ab-accent-soft: #eef2ff;
+  --ab-success: #15803d;
+  --ab-success-soft: #f0fdf4;
+  --ab-danger: #dc2626;
+  /* shape */
+  --ab-radius-s: 6px;
+  --ab-radius-m: 10px;
+  --ab-radius-l: 16px;
+  /* elevation */
+  --ab-shadow-s: 0 1px 2px rgba(24, 24, 27, 0.06);
+  --ab-shadow-l: 0 1px 2px rgba(24, 24, 27, 0.04), 0 12px 32px rgba(24, 24, 27, 0.07);
+  /* motion */
+  --ab-fast: 150ms;
+  --ab-slow: 350ms;
+  --ab-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  /* focus */
+  --ab-ring: 0 0 0 3px rgba(79, 70, 229, 0.28);
 }
-.ab-card {
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* The hidden attribute must always win, even over display rules */
+[hidden] {
+  display: none !important;
+}
+
+/* Hide the separator dot when "Adjust schedule" is hidden (during breaks) */
+#adjust-btn[hidden] + .ab-dot {
+  display: none;
+}
+
+body {
   width: 320px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 32px rgba(44, 62, 80, 0.13);
-  padding: 28px 24px 18px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  padding: 16px 16px 12px;
+  background: var(--ab-surface);
+  color: var(--ab-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Header */
 .ab-header {
   display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.ab-logo {
+  flex: none;
+  display: block;
+}
+
+.ab-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.ab-tagline {
+  font-size: 12px;
+  color: var(--ab-text-2);
+  margin-top: 1px;
+}
+
+/* Status hero: countdown ring (or rep progress during a break) */
+.ab-hero {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 18px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
-.ab-logo {
-  background: #2d7ff9;
-  color: #fff;
+
+.ab-ring {
+  width: 118px;
+  height: 118px;
   border-radius: 50%;
-  font-size: 38px;
-  width: 64px;
-  height: 64px;
+  padding: 5px;
+  background: conic-gradient(var(--ab-accent) calc(var(--pct, 0) * 1%), var(--ab-border) 0);
+  transition: background var(--ab-slow);
+}
+
+.ab-ring-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--ab-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.ab-time {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.ab-time-label {
+  font-size: 10px;
+  color: var(--ab-text-3);
+}
+
+.ab-context {
+  font-size: 12px;
+  color: var(--ab-text-2);
+  min-height: 16px;
+}
+
+/* Form groups */
+form[hidden] {
+  display: none;
+}
+
+.ab-group {
+  border: none;
+  padding: 0;
+  margin-bottom: 14px;
+}
+
+.ab-group legend {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ab-text-2);
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.ab-segments,
+.ab-pills {
+  display: grid;
+  gap: 6px;
+}
+
+.ab-segments { grid-template-columns: repeat(4, 1fr); }
+.ab-pills { grid-template-columns: repeat(2, 1fr); }
+
+.ab-segments input,
+.ab-pills input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ab-segments span,
+.ab-pills span {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
-}
-h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #2d7ff9;
-  margin: 0 0 4px 0;
-  letter-spacing: 1px;
-}
-.ab-subtitle {
-  font-size: 1rem;
-  color: #5a6b7b;
-  text-align: center;
-  margin: 0 0 2px 0;
+  padding: 8px 4px;
+  border-radius: var(--ab-radius-s);
+  border: 1px solid var(--ab-border);
+  background: var(--ab-surface);
+  color: var(--ab-text-2);
+  font-size: 12.5px;
   font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--ab-fast), color var(--ab-fast), background var(--ab-fast);
+  white-space: nowrap;
 }
-.ab-form {
-  display: flex;
+
+.ab-segments span {
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.ab-form label {
-  margin-top: 8px;
-  margin-bottom: 2px;
+  gap: 1px;
   font-size: 14px;
-  color: #2d7ff9;
   font-weight: 600;
 }
-.ab-form select, .ab-form button {
-  margin-bottom: 8px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: 1px solid #c7d6ee;
-  font-size: 15px;
-  font-family: inherit;
+
+.ab-segments em {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--ab-text-3);
 }
-.ab-form select:focus {
-  outline: 2px solid #2d7ff9;
+
+.ab-segments span:hover,
+.ab-pills span:hover {
+  border-color: var(--ab-border-strong);
 }
-#ab-start-btn, .ab-form button {
-  background: linear-gradient(90deg, #2d7ff9 60%, #5a9bff 100%);
-  color: #fff;
+
+.ab-segments input:checked + span,
+.ab-pills input:checked + span {
+  border-color: var(--ab-accent);
+  background: var(--ab-accent-soft);
+  color: var(--ab-accent);
+}
+
+.ab-segments input:checked + span em { color: var(--ab-accent); opacity: 0.75; }
+
+.ab-segments input:focus-visible + span,
+.ab-pills input:focus-visible + span {
+  box-shadow: var(--ab-ring);
+}
+
+/* Primary action */
+.ab-primary {
+  display: block;
+  width: 100%;
+  padding: 10px;
   border: none;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.18s, box-shadow 0.18s;
-  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
-}
-#ab-start-btn:hover, .ab-form button:hover {
-  background: linear-gradient(90deg, #1a5fcc 60%, #2d7ff9 100%);
-}
-.ab-status {
-  margin-top: 8px;
-  font-size: 13px;
-  color: #2d7ff9;
-  text-align: center;
-  min-height: 18px;
-}
-.ab-countdown {
-  margin-top: 4px;
+  border-radius: var(--ab-radius-m);
+  font-family: inherit;
   font-size: 14px;
-  color: #2d7ff9;
-  text-align: center;
-  min-height: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--ab-accent);
+  color: #ffffff;
+  box-shadow: var(--ab-shadow-s);
+  transition: background var(--ab-fast);
 }
-.ab-footer {
+
+.ab-primary:hover { background: var(--ab-accent-strong); }
+
+.ab-primary:focus-visible {
+  outline: none;
+  box-shadow: var(--ab-ring);
+}
+
+#go-break-btn {
+  margin-bottom: 4px;
+}
+
+/* Secondary actions while the timer runs */
+.ab-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ab-actions[hidden] {
+  display: none;
+}
+
+.ab-actions button {
+  padding: 4px 6px;
+  background: none;
+  border: none;
+  border-radius: var(--ab-radius-s);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ab-text-2);
+  cursor: pointer;
+  transition: color var(--ab-fast);
+}
+
+.ab-actions button:hover { color: var(--ab-text); }
+
+#stop-btn:hover { color: var(--ab-danger); }
+
+.ab-actions button:focus-visible {
+  outline: none;
+  box-shadow: var(--ab-ring);
+}
+
+.ab-dot {
+  color: var(--ab-border-strong);
+}
+
+/* Status, stats, footer */
+.ab-status {
+  min-height: 16px;
+  margin-top: 8px;
   font-size: 12px;
-  color: #7a8ca3;
-  opacity: 0.8;
+  text-align: center;
+  color: var(--ab-text-2);
+}
+
+.ab-status.ab-error { color: var(--ab-danger); }
+
+.ab-stats {
+  margin-top: 6px;
+  padding: 7px 10px;
+  border-radius: var(--ab-radius-s);
+  background: var(--ab-surface-2);
+  border: 1px solid var(--ab-border);
+  font-size: 12px;
+  color: var(--ab-text-2);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.ab-stats[hidden] {
+  display: none;
+}
+
+.ab-footer {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ab-border);
+  font-size: 11px;
+  color: var(--ab-text-3);
   text-align: center;
 }
-.ab-footer-icon {
-  font-size: 16px;
-  color: #2d7ff9;
-  vertical-align: middle;
-} 
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

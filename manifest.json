@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ActiveBreak - Exercise Break Timer",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Enforces healthy exercise breaks. When time is up, your screen locks until on-device AI pose detection verifies your reps.",
   "permissions": [
     "storage",
@@ -12,6 +12,10 @@
   ],
   "background": {
     "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": false
   },
   "action": {
     "default_popup": "popup/popup.html",

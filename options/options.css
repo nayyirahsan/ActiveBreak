@@ -1,0 +1,229 @@
+/* ActiveBreak settings page.
+   Uses the shared ActiveBreak design tokens — keep the :root block in sync
+   across popup/popup.css, break/break.css, options/options.css, and
+   content/overlay.css. */
+
+:root {
+  /* color */
+  --ab-bg: #f7f7f8;
+  --ab-surface: #ffffff;
+  --ab-surface-2: #fafafa;
+  --ab-border: #e4e4e7;
+  --ab-border-strong: #d4d4d8;
+  --ab-text: #18181b;
+  --ab-text-2: #52525b;
+  --ab-text-3: #71717a;
+  --ab-accent: #4f46e5;
+  --ab-accent-strong: #4338ca;
+  --ab-accent-soft: #eef2ff;
+  --ab-success: #15803d;
+  --ab-success-soft: #f0fdf4;
+  --ab-danger: #dc2626;
+  /* shape */
+  --ab-radius-s: 6px;
+  --ab-radius-m: 10px;
+  --ab-radius-l: 16px;
+  /* elevation */
+  --ab-shadow-s: 0 1px 2px rgba(24, 24, 27, 0.06);
+  --ab-shadow-l: 0 1px 2px rgba(24, 24, 27, 0.04), 0 12px 32px rgba(24, 24, 27, 0.07);
+  /* motion */
+  --ab-fast: 150ms;
+  --ab-slow: 350ms;
+  --ab-ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  /* focus */
+  --ab-ring: 0 0 0 3px rgba(79, 70, 229, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  min-width: 360px;
+  padding: 16px;
+  background: var(--ab-bg);
+  color: var(--ab-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  justify-content: center;
+}
+
+.ab-card {
+  width: min(460px, 100%);
+  background: var(--ab-surface);
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-l);
+  padding: 20px 24px 16px;
+  box-shadow: var(--ab-shadow-s);
+}
+
+.ab-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ab-border);
+  margin-bottom: 16px;
+}
+
+.ab-logo {
+  flex: none;
+  display: block;
+}
+
+h1 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.ab-subtitle {
+  font-size: 12px;
+  color: var(--ab-text-3);
+  margin-top: 1px;
+}
+
+h2 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.ab-section-note {
+  font-size: 12px;
+  color: var(--ab-text-2);
+  margin-bottom: 12px;
+}
+
+.ab-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--ab-border);
+}
+
+.ab-row:last-of-type {
+  border-bottom: none;
+}
+
+.ab-row label {
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+/* Stepper: − [value] + */
+.ab-stepper {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-s);
+  overflow: hidden;
+  background: var(--ab-surface);
+}
+
+.ab-stepper button {
+  width: 30px;
+  border: none;
+  background: var(--ab-surface-2);
+  color: var(--ab-text-2);
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--ab-fast), color var(--ab-fast);
+}
+
+.ab-stepper button:hover {
+  background: var(--ab-accent-soft);
+  color: var(--ab-accent);
+}
+
+.ab-stepper button:focus-visible {
+  outline: none;
+  box-shadow: inset var(--ab-ring);
+}
+
+.ab-stepper input {
+  width: 48px;
+  padding: 7px 4px;
+  border: none;
+  border-left: 1px solid var(--ab-border);
+  border-right: 1px solid var(--ab-border);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ab-text);
+  background: var(--ab-surface);
+  font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.ab-stepper input::-webkit-outer-spin-button,
+.ab-stepper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ab-stepper input:focus-visible {
+  outline: none;
+  box-shadow: inset var(--ab-ring);
+}
+
+.ab-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ab-border);
+}
+
+#restore-btn {
+  padding: 6px 10px;
+  background: none;
+  border: 1px solid var(--ab-border);
+  border-radius: var(--ab-radius-s);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ab-text-2);
+  cursor: pointer;
+  transition: border-color var(--ab-fast), color var(--ab-fast);
+}
+
+#restore-btn:hover {
+  border-color: var(--ab-border-strong);
+  color: var(--ab-text);
+}
+
+#restore-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ab-ring);
+}
+
+.ab-save-status {
+  font-size: 12px;
+  color: var(--ab-success);
+  min-height: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

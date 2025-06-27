@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ActiveBreak — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="ab-card">
+    <header class="ab-header">
+      <svg class="ab-logo" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true">
+        <rect width="24" height="24" rx="6" fill="#4f46e5"/>
+        <path d="M5 12.5h3l1.9-4.8 3.7 8.4 1.9-4.8H19" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>ActiveBreak settings</h1>
+        <p class="ab-subtitle">Changes save automatically</p>
+      </div>
+    </header>
+
+    <section aria-labelledby="reps-heading">
+      <h2 id="reps-heading">Reps per break</h2>
+      <p class="ab-section-note">How many verified reps unlock your screen.</p>
+
+      <div class="ab-row">
+        <label for="reps-jumping_jacks">Jumping Jacks</label>
+        <div class="ab-stepper">
+          <button type="button" data-step="-1" data-target="jumping_jacks" aria-label="Fewer jumping jacks">−</button>
+          <input type="number" id="reps-jumping_jacks" data-exercise="jumping_jacks" min="1" max="50" inputmode="numeric">
+          <button type="button" data-step="1" data-target="jumping_jacks" aria-label="More jumping jacks">+</button>
+        </div>
+      </div>
+
+      <div class="ab-row">
+        <label for="reps-squats">Squats</label>
+        <div class="ab-stepper">
+          <button type="button" data-step="-1" data-target="squats" aria-label="Fewer squats">−</button>
+          <input type="number" id="reps-squats" data-exercise="squats" min="1" max="50" inputmode="numeric">
+          <button type="button" data-step="1" data-target="squats" aria-label="More squats">+</button>
+        </div>
+      </div>
+
+      <div class="ab-row">
+        <label for="reps-push_ups">Push-ups</label>
+        <div class="ab-stepper">
+          <button type="button" data-step="-1" data-target="push_ups" aria-label="Fewer push-ups">−</button>
+          <input type="number" id="reps-push_ups" data-exercise="push_ups" min="1" max="50" inputmode="numeric">
+          <button type="button" data-step="1" data-target="push_ups" aria-label="More push-ups">+</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="ab-footer">
+      <button type="button" id="restore-btn">Restore defaults</button>
+      <span class="ab-save-status" id="save-status" role="status"></span>
+    </footer>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

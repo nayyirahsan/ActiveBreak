@@ -76,6 +76,32 @@ body {
   min-width: 0;
 }
 
+#options-btn {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--ab-radius-s);
+  color: var(--ab-text-3);
+  cursor: pointer;
+  transition: color var(--ab-fast), border-color var(--ab-fast);
+}
+
+#options-btn:hover {
+  color: var(--ab-text);
+  border-color: var(--ab-border);
+}
+
+#options-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--ab-ring);
+}
+
 h1 {
   font-size: 15px;
   font-weight: 600;

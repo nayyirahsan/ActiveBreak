@@ -173,4 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({ action: 'FOCUS_BREAK_TAB' }).catch(() => {});
     window.close();
   });
+
+  document.getElementById('options-btn').addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
+  });
 });

@@ -105,8 +105,12 @@ let finished = false;
 init();
 
 async function init() {
-  const { breakActive, breakExercise } = await chrome.storage.local.get(['breakActive', 'breakExercise']);
-  exercise = EXERCISES[breakExercise] || EXERCISES.jumping_jacks;
+  const { breakActive, breakExercise, repTargets } =
+    await chrome.storage.local.get(['breakActive', 'breakExercise', 'repTargets']);
+  const base = EXERCISES[breakExercise] || EXERCISES.jumping_jacks;
+  // Rep targets are user-configurable on the settings page.
+  const customReps = repTargets && repTargets[breakExercise];
+  exercise = customReps ? { ...base, reps: Math.min(50, Math.max(1, Math.round(customReps))) } : base;
 
   els.exerciseName.textContent = exercise.name;
   els.exerciseTip.textContent = exercise.tip;

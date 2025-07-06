@@ -1,0 +1,17 @@
+{
+  "name": "activebreak-bench",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bench": "node run.mjs",
+    "bench:browser": "node run-browser-only.mjs",
+    "bench:all": "node run-all.mjs",
+    "accuracy": "node accuracy-bench.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^24.8.0"
+  },
+  "dependencies": {
+    "playwright": "^1.52.0"
+  }
+}

@@ -23,6 +23,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     focusBreakTab().then(() => sendResponse({ ok: true }));
     return true;
   }
+  // Benchmark harness only — simulates break page writing breakProgress.
+  if (message.action === 'BENCH_STORAGE_START') {
+    chrome.storage.local.remove('benchCross').then(() => sendResponse({ ok: true }));
+    return true;
+  }
+  if (message.action === 'BENCH_STORAGE_WRITE') {
+    chrome.storage.local.set({ benchCross: { sentAt: message.sentAt, index: message.index } })
+      .then(() => sendResponse({ ok: true }));
+    return true;
+  }
 });
 
 // If the browser restarts mid-break, bring the break tab back.

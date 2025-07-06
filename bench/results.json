@@ -1,0 +1,45 @@
+{
+  "environment": {
+    "platform": "darwin",
+    "measuredAt": "2026-07-08T04:22:00.000Z",
+    "machine": "Mac (local dev)",
+    "chrome": "Google Chrome 150 + Playwright Chromium for extension tests",
+    "notes": [
+      "Model/inference: extension page (MV3 CSP, chrome-extension:// origin)",
+      "Cold start: fresh Chrome profile, first load",
+      "Storage: chrome.storage.local write → onChanged (same page + background→page)",
+      "Accuracy: synthetic landmark sequences only; no labeled webcam video"
+    ]
+  },
+  "modelLoad": {
+    "delegate": "GPU",
+    "coldStartMs": 82.9,
+    "warmMedianMs": 49.2,
+    "warmP95Ms": 82.9,
+    "httpServerColdStartMs": 112.8,
+    "wasmLoadMedianMs": 0.1,
+    "modelInitMedianMs": 49.2,
+    "under800msClaim": true
+  },
+  "inference": {
+    "mode": "IMAGE",
+    "medianMs": 7.9,
+    "p95Ms": 19.5,
+    "theoreticalMaxFps": 126.6,
+    "productionFps": "~30 (camera frame rate; break.js processes one pose frame per new webcam frame)",
+    "thirtyFpsClaim": "Supported — inference budget ~7.9ms/frame vs 33ms/frame at 30fps"
+  },
+  "storage": {
+    "sameContextMedianMs": 0.2,
+    "sameContextP95Ms": 4.0,
+    "crossContextMedianMs": 0.3,
+    "crossContextP95Ms": 0.4,
+    "sub100msClaim": true
+  },
+  "accuracy": {
+    "syntheticFsmAccuracy": 100,
+    "cases": 6,
+    "realWorldWebcamAccuracy": "Not measured — requires labeled exercise video",
+    "ninetyFivePercentClaim": "Not verified on real webcam data; synthetic FSM tests pass 6/6"
+  }
+}

@@ -61,7 +61,39 @@ ActiveBreak/
   vendor/
     tasks-vision/         # MediaPipe Tasks Vision bundle + wasm (local, no CDN)
     pose_landmarker_lite.task  # Pose model (~5.5 MB, runs on-device)
+  bench/
+    benchmark.html/.js    # Browser benchmarks (model load, inference, storage)
+    accuracy-bench.mjs    # Synthetic rep-count FSM tests
+    results.json          # Latest measured numbers
 ```
+
+## Benchmarks
+
+Local performance harness in `bench/`. Numbers below are from a Mac dev machine (Chrome 150, GPU delegate); your results may vary.
+
+| Metric | Measured |
+|---|---|
+| Model load (cold) | ~83 ms |
+| Model load (warm median) | ~49 ms |
+| Pose inference | ~7.9 ms/frame median |
+| Production throughput | ~30 fps (camera frame rate) |
+| `chrome.storage` sync | ~0.3 ms median (background → UI) |
+| Rep FSM (synthetic) | 6/6 test cases pass |
+
+### Run
+
+```bash
+cd bench
+npm install
+node run-browser-only.mjs      # model load + inference
+node run-storage-playwright.mjs # chrome.storage latency (extension context)
+npm run accuracy               # synthetic rep-count FSM tests
+node run-cold-start.mjs        # fresh-profile cold start
+```
+
+Latest full results: `bench/results.json`.
+
+**Note:** Synthetic FSM tests validate the rep-counting logic on ideal landmark sequences. Real-world webcam accuracy requires labeled exercise video and is not benchmarked here.
 
 ## Why a dedicated break tab?
 

@@ -1,0 +1,5 @@
+bench/node_modules/
+bench/.pw-profile/
+bench/.pw-profile-ext/
+bench/.chrome-profile/
+bench/.chrome-cold-profile/

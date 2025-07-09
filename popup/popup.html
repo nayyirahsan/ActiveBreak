@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ActiveBreak Setup</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,600,800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+  <div class="ab-popup-bg">
+    <div class="ab-card">
+      <div class="ab-header">
+        <span class="material-icons ab-logo">fitness_center</span>
+        <h2>ActiveBreak</h2>
+        <p class="ab-subtitle">Take healthy breaks, stay productive, and let AI keep you moving!</p>
+      </div>
+      <form id="setup-form" class="ab-form">
+        <label for="timer">Break Interval</label>
+        <select id="timer" name="timer">
+          <option value="0.1667">10 seconds (test)</option>
+          <option value="20">20 min</option>
+          <option value="30">30 min</option>
+          <option value="60">1 hour</option>
+        </select>
+        <label for="exercise">Exercise</label>
+        <select id="exercise" name="exercise">
+          <option value="random">Random</option>
+          <option value="jumping_jacks">Jumping Jacks</option>
+          <option value="squats">Squats</option>
+          <option value="push_ups">Push-ups</option>
+        </select>
+        <button type="submit" id="start-btn">Start</button>
+      </form>
+      <div id="status" class="ab-status"></div>
+      <div id="countdown-display" class="ab-countdown"></div>
+      <footer class="ab-footer">
+        <span class="material-icons ab-footer-icon">lock</span>
+        <span>Your camera never leaves your device. AI runs locally for your privacy.</span>
+      </footer>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 

@@ -2,6 +2,8 @@ let overlay = null;
 let webcamStream = null;
 let poseDetector = null;
 let poseDetectionActive = false;
+let exerciseDetectionStreak = 0;
+const REQUIRED_DETECTION_STREAK = 5;
 
 // On script load, check if a break is active
 chrome.storage.sync.get(['breakActive', 'breakExercise'], (data) => {
@@ -12,6 +14,7 @@ chrome.storage.sync.get(['breakActive', 'breakExercise'], (data) => {
 
 function removeOverlay() {
   poseDetectionActive = false;
+  exerciseDetectionStreak = 0;
   if (poseDetector && poseDetector.close) {
     poseDetector.close();
     poseDetector = null;
@@ -86,6 +89,7 @@ function showOverlay(exercise, blockAll = false) {
         webcamStream = stream;
         video.srcObject = stream;
         video.onloadedmetadata = () => {
+          resizeCanvasToVideo(video, canvas);
           video.play();
           loadMediaPipePose(video, canvas, closeBtn, timerMsg);
         };
@@ -138,7 +142,7 @@ function loadMediaPipePose(video, canvas, closeBtn, timerMsg) {
 
 function startPoseDetection(video, canvas, closeBtn, timerMsg) {
   poseDetectionActive = true;
-  poseDetector = new window.Pose.Pose({
+  poseDetector = new window.Pose({
     locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose@0.5.1675466197/${file}`
   });
   poseDetector.setOptions({
@@ -150,41 +154,46 @@ function startPoseDetection(video, canvas, closeBtn, timerMsg) {
   });
   poseDetector.onResults((results) => {
     drawPose(results, canvas, video);
+    let detectionThisFrame = false;
+    let successText = 'Verification complete!';
+    let waitingText = 'Waiting for pose detection...';
+
     // Exercise-specific detection
     if (window.currentExerciseForDetection === 'jumping_jacks') {
       if (isJumpingJack(results.poseLandmarks)) {
-        closeBtn.disabled = false;
-        timerMsg.textContent = 'Jumping Jack detected!';
-      } else {
-        closeBtn.disabled = true;
-        timerMsg.textContent = 'Do a Jumping Jack to continue...';
+        detectionThisFrame = true;
       }
+      successText = 'Jumping Jack detected!';
+      waitingText = 'Do a Jumping Jack to continue...';
     } else if (window.currentExerciseForDetection === 'squats') {
       if (isSquat(results.poseLandmarks)) {
-        closeBtn.disabled = false;
-        timerMsg.textContent = 'Squat detected!';
-      } else {
-        closeBtn.disabled = true;
-        timerMsg.textContent = 'Do a Squat to continue...';
+        detectionThisFrame = true;
       }
+      successText = 'Squat detected!';
+      waitingText = 'Do a Squat to continue...';
     } else if (window.currentExerciseForDetection === 'push_ups') {
       if (isPushUp(results.poseLandmarks)) {
-        closeBtn.disabled = false;
-        timerMsg.textContent = 'Push-up detected!';
-      } else {
-        closeBtn.disabled = true;
-        timerMsg.textContent = 'Do a Push-up to continue...';
+        detectionThisFrame = true;
       }
+      successText = 'Push-up detected!';
+      waitingText = 'Do a Push-up to continue...';
     } else {
       // Default: enable if any pose detected
       if (results.poseLandmarks && results.poseLandmarks.length > 0) {
-        closeBtn.disabled = false;
-        timerMsg.textContent = 'Verification complete!';
+        detectionThisFrame = true;
       } else {
         closeBtn.disabled = true;
         timerMsg.textContent = 'Waiting for pose detection...';
       }
     }
+
+    if (detectionThisFrame) {
+      exerciseDetectionStreak += 1;
+    } else {
+      exerciseDetectionStreak = 0;
+    }
+
+    updateDetectionState(closeBtn, timerMsg, successText, waitingText);
   });
 
   async function detectFrame() {
@@ -193,6 +202,16 @@ function startPoseDetection(video, canvas, closeBtn, timerMsg) {
     requestAnimationFrame(detectFrame);
   }
   detectFrame();
+}
+
+function updateDetectionState(closeBtn, timerMsg, successText, waitingText) {
+  if (exerciseDetectionStreak >= REQUIRED_DETECTION_STREAK) {
+    closeBtn.disabled = false;
+    timerMsg.textContent = successText;
+  } else {
+    closeBtn.disabled = true;
+    timerMsg.textContent = waitingText;
+  }
 }
 
 // Simple rule-based jumping jack detection
@@ -268,8 +287,21 @@ function drawPose(results, canvas, video) {
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (results.poseLandmarks) {
-    window.drawConnectors(ctx, results.poseLandmarks, window.POSE_CONNECTIONS, { color: '#2d7ff9', lineWidth: 2 });
-    window.drawLandmarks(ctx, results.poseLandmarks, { color: '#ff9800', lineWidth: 1 });
+    resizeCanvasToVideo(video, canvas);
+    if (window.drawConnectors && window.drawLandmarks && window.Pose && window.Pose.POSE_CONNECTIONS) {
+      window.drawConnectors(ctx, results.poseLandmarks, window.Pose.POSE_CONNECTIONS, { color: '#2d7ff9', lineWidth: 2 });
+      window.drawLandmarks(ctx, results.poseLandmarks, { color: '#ff9800', lineWidth: 1 });
+    }
+  }
+}
+
+function resizeCanvasToVideo(video, canvas) {
+  if (!video || !canvas) return;
+  const { videoWidth, videoHeight } = video;
+  if (!videoWidth || !videoHeight) return;
+  if (canvas.width !== videoWidth || canvas.height !== videoHeight) {
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
   }
 }
 
